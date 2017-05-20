@@ -2,6 +2,8 @@
 
 In this short workshop, we'll be using [Django](https://www.djangoproject.com), an open-source web framework written in Python, to develop a simple blogging platform. 
 
+Note that below `$` denotes what should be entered into the command prompt. Enter what follows it into the macOS Terminal or Windows Command Prompt. 
+
 ## Installation 
 
 ### macOS 
@@ -51,8 +53,6 @@ In this short workshop, we'll be using [Django](https://www.djangoproject.com), 
 12. (Optional) Install Visual Studio Code: https://code.visualstudio.com/docs/setup/mac
 
 ### Windows
-
-Start by following the instructions for [installing Python, PIP, Setuptools, and Django](https://docs.djangoproject.com/en/1.11/howto/windows/).
 
 1. If you don't have a recent version of Python install, first install the [Chocolatey package manager](https://chocolatey.org), which helps you manage dependencies on Windows. 
 
@@ -210,7 +210,7 @@ class PostListView(ListView):
 {% endif %}
 ```
 
-3. Update `urlpatterns` in `posts/urls.py`:
+3. Update `urlpatterns` in `posts/urls.py`, replacing the `index` method we had tested earlier to create "Hello World" 
 
 ```python
 from django.conf.urls import url
@@ -238,5 +238,9 @@ admin.site.register(Post)
 
   `$ ./manage.py createsuperuser`
   
-3. Visit your new admin system at `http://localhost:8000/admin`
+3. Visit your new admin system at `http://localhost:8000/admin` to create new blog posts. 
+
+## Next steps 
+
+Now you have a basic functioning system! You may want to explore setting up a `DetailView` for displaying single posts (we've implemented this in this repository--see `posts/views.py`), customizing the admin system, and how you can better style your pages (e.g. using [Twitter Bootstrap](https://getbootstrap.com))
 
