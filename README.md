@@ -196,15 +196,17 @@ class PostListView(ListView):
 
 2. Create a new template at `posts/templates/posts/post_list.html`:
 
-```python
-{% if posts %}
-  {% for post in posts %}
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.content }}</p>
-    <hr/>
-  {% endfor %}
+```html
+<h1>My blog</h1>
+{% if post_list %}
+    {% for post in post_list %}
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <p><small>Posted: {{ post.created }}</small></p>
+        <hr/>
+    {% endfor %}
 {% else %}
-  <p>No posts...yet!</p>
+    <p>No posts...yet!</p>
 {% endif %}
 ```
 
