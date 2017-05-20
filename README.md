@@ -23,6 +23,8 @@ In this short workshop, we'll be using [Django](https://www.djangoproject.com), 
 5. Navigate into the created `blog` folder using `cd blog` and activate the virtualenv:
 
   `$ source bin/activate`
+  
+  You'll now see that your shell reflects the change by indicating `(blog)` at the beginning of your prompt
 
 6. Install Django via pip:
 
@@ -30,17 +32,23 @@ In this short workshop, we'll be using [Django](https://www.djangoproject.com), 
 
 7. Create a new Django project: 
 
-  `django-admin startproject myblog`
+  `$ django-admin startproject myblog`
 
 8. Navigate into the created `myblog` project folder using `cd myblog`
 
-9. Run the development server on port 8000
+9. Set up the database by running the migrate tool: 
+
+  `$ ./manage.py migrate`
+
+  In your project folder, you'll see a file `db.sqlite3` where your SQLite database is located
+
+10. Run the development server on port 8000
 
   `$ ./manage.py runserver`
 
-10. Navigate in your browser to `http://localhost:8000`
+11. Navigate in your browser to `http://localhost:8000`
 
-11. (Optional) Install Visual Studio Code: https://code.visualstudio.com/docs/setup/mac
+12. (Optional) Install Visual Studio Code: https://code.visualstudio.com/docs/setup/mac
 
 ### Windows
 
@@ -63,6 +71,8 @@ Start by following the instructions for [installing Python, PIP, Setuptools, and
 5. Navigate into the created `blog` folder using `cd blog` and activate the virtualenv:
 
   `$ Scripts\activate`
+  
+  You'll now see that your shell reflects the change by indicating `(blog)` at the beginning of your prompt
 
 6. Install Django via pip:
 
@@ -70,15 +80,161 @@ Start by following the instructions for [installing Python, PIP, Setuptools, and
   
 7. Create a new Django project: 
 
-  `django-admin startproject myblog`
+  `$ django-admin startproject myblog`
 
 8. Navigate into the created `myblog` project folder using `cd myblog`
 
-9. Run the development server on port 8000
+9. Set up the database by running the migrate tool: 
+
+  `$ ./manage.py migrate`
+  
+  In your project folder, you'll see a file `db.sqlite3` where your SQLite database is located
+
+10. Run the development server on port 8000
 
   `$ ./manage.py runserver`
 
-10. Navigate in your browser to `http://localhost:8000`
+11. Navigate in your browser to `http://localhost:8000`
 
-11. (Optional) Install Visual Studio Code: https://code.visualstudio.com/docs/setup/windows
+12. (Optional) Install Visual Studio Code: https://code.visualstudio.com/docs/setup/windows
+
+## Hello World!
+
+1. First, let's create a new app: 
+
+  `$ ./manage.py startapp posts`
+  
+2. In the newly created `posts/views.py` file, include the following code: 
+
+```python
+from django.http import HttpResponse
+
+
+def index(request):
+    return HttpResponse("Hello world!")
+```
+
+3. Create a new file at `posts/urls.py`, and include the following code: 
+
+```python
+from django.conf.urls import url
+
+from views import index
+
+urlpatterns = [
+    url(r'^$', index, name='index'),
+]
+```
+
+4. Now, we need to link up the project and the application urls. Update your `myblog/urls.py` file with the following code: 
+
+```python
+from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r'^posts/', include('posts.urls')),
+    url(r'^admin/', admin.site.urls),
+]
+```
+
+5. Now, we're going to create our `Posts` model. In `posts/models.py`, include the following code: 
+
+```python
+from django.db import models
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    
+    # timestamps
+    created = models.DateTimeField(
+        auto_now_add=True
+    )
+    updated = models.DateTimeField(
+        auto_now=True
+    )
+```
+
+6. Our project needs to be aware of our new model. To do this, we add our application to `myblog/settings.py`. At the bottom of `INSTALLED_APPS`, include the new application's configuration, so it looks like this:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'posts.apps.PostsConfig'
+]
+```
+
+7. Now, we create a new migration to reflect changes in our model: 
+
+  `$ ./manage.py makemigrations`
+
+8. Apply the changes to our database: 
+
+  `$ ./manage.py migrate`
+  
+## Creating your first views 
+
+1. Update `posts/views.py` with the following code:
+
+```python 
+from django.views.generic import ListView
+
+from .models import Post
+
+
+class PostListView(ListView):
+    template_name = 'posts/post_list.html'
+    model = Post
+```
+
+2. Create a new template at `posts/templates/posts/post_list.html`:
+
+```python
+{% if posts %}
+  {% for post in posts %}
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <hr/>
+  {% endfor %}
+{% else %}
+  <p>No posts...yet!</p>
+{% endif %}
+```
+
+3. Update `urlpatterns` in `posts/urls.py`:
+
+```python
+from django.conf.urls import url
+
+from views import PostListView
+
+urlpatterns = [
+    url(r'^$', PostListView.as_view(), name='post-list'),
+]
+```
+
+## Leveraging the built-in admin system
+
+1. First, we need to make the admin system aware of our new model so that we can make changes to it, such as adding, deleting, and editing posts. Add the following code to `posts/admin.py`:
+
+```python
+from django.contrib import admin
+
+from .models import Post
+
+admin.site.register(Post)
+```
+
+2. Create a new superuser to accesss the backend by following the prompts after running:
+
+  `$ ./manage.py createsuperuser`
+  
+3. Visit your new admin system at `http://localhost:8000/admin`
 
