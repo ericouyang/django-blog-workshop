@@ -58,7 +58,7 @@ Note that below `$` denotes what should be entered into the command prompt. Ente
 
 2. Install necessary dependencies: 
   
-  `$ choco install python && choco install sqlite`
+  `$ choco install python sqlite`
 
 3. Install `virtualenv` globally via pip, the Python package manager. This tool allows to create virtual environments to help make development more manageable. 
 
@@ -86,13 +86,13 @@ Note that below `$` denotes what should be entered into the command prompt. Ente
 
 9. Set up the database by running the migrate tool: 
 
-  `$ ./manage.py migrate`
+  `$ python manage.py migrate`
   
   In your project folder, you'll see a file `db.sqlite3` where your SQLite database is located
 
 10. Run the development server on port 8000
 
-  `$ ./manage.py runserver`
+  `$ python manage.py runserver`
 
 11. Navigate in your browser to `http://localhost:8000`
 
@@ -102,7 +102,7 @@ Note that below `$` denotes what should be entered into the command prompt. Ente
 
 1. First, let's create a new app: 
 
-  `$ ./manage.py startapp posts`
+  `$ python manage.py startapp posts`
   
 2. In the newly created `posts/views.py` file, include the following code: 
 
@@ -173,11 +173,11 @@ INSTALLED_APPS = [
 
 7. Now, we create a new migration to reflect changes in our model: 
 
-  `$ ./manage.py makemigrations`
+  `$ python manage.py makemigrations`
 
 8. Apply the changes to our database: 
 
-  `$ ./manage.py migrate`
+  `$ python manage.py migrate`
   
 ## Creating your first views 
 
@@ -236,7 +236,7 @@ admin.site.register(Post)
 
 2. Create a new superuser to accesss the backend by following the prompts after running:
 
-  `$ ./manage.py createsuperuser`
+  `$ python manage.py createsuperuser`
   
 3. Visit your new admin system at `http://localhost:8000/admin` to create new blog posts. 
 
