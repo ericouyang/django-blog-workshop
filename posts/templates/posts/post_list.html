@@ -1,0 +1,11 @@
+<h1>My blog</h1>
+{% if post_list %}
+    {% for post in post_list %}
+        <h2><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+        <p>{{ post.content }}</p>
+        <p><small>Posted: {{ post.created }}</small></p>
+        <hr/>
+    {% endfor %}
+{% else %}
+    <p>No posts...yet!</p>
+{% endif %}
